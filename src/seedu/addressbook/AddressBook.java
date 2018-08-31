@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.*;
 
 /*
  * NOTE : =============================================================
@@ -450,6 +451,7 @@ public class AddressBook {
      * @return feedback display message for the operation result
      */
     private static String executeFindPersons(String commandArgs) {
+        commandArgs = commandArgs.toUpperCase();
         final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
         final ArrayList<String[]> personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
         showToUser(personsFound);
@@ -486,8 +488,14 @@ public class AddressBook {
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
         for (String[] person : getAllPersonsInAddressBook()) {
             final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            Set<String> name = new HashSet<String>();
+            for(String s : wordsInName){
+                s = s.toUpperCase();
+                name.add(s);
+            }
+            if (!Collections.disjoint(name, keywords)) {
                 matchedPersons.add(person);
+
             }
         }
         return matchedPersons;
